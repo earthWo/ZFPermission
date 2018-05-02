@@ -43,11 +43,11 @@ class RegisterCallback :Application.ActivityLifecycleCallbacks{
 
     private var callback: RequestCallback?=null
 
-    private var list: List<String>?=null
+    private var list: Array<String>?=null
 
     private var context: Context?=null
 
-    constructor(context: Context,callback: RequestCallback,list: List<String>){
+    constructor(context: Context,callback: RequestCallback,list: Array<String>){
         (context.applicationContext as Application).registerActivityLifecycleCallbacks(this)
         this.context=context
         this.callback=callback

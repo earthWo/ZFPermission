@@ -1,6 +1,9 @@
 package win.whitelife.permission.request
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.support.v4.content.ContextCompat
+import android.text.TextUtils
 import win.whitelife.permission.`interface`.RequestCallback
 import java.util.*
 
@@ -10,13 +13,14 @@ import java.util.*
  */
 class PermissionRequest : Request{
 
-
     private var context :Context?=null
 
     private var permissionList :LinkedList<String>?=null
 
-
     private var callback: RequestCallback?=null
+
+
+    private var permissionArray: Array<String>?=null
 
     constructor(context: Context){
         this.context=context
@@ -26,6 +30,34 @@ class PermissionRequest : Request{
 
     override fun start() {
 
+        if(permissionList!=null&&permissionList!!.isNotEmpty()){
+            checkPermission()
+        }else if(callback!=null){
+            callback!!.finish(null)
+        }
+    }
+
+    /**
+     *
+     */
+    private fun checkPermission(){
+
+        val list: LinkedList<String>?=LinkedList()
+
+        for ( permission in permissionList!!.iterator() ){
+
+            //权限不为空
+            if(!TextUtils.isEmpty(permission)){
+
+                val state=  ContextCompat.checkSelfPermission(context!!,permission)
+                //已经有权限
+                if(state== PackageManager.PERMISSION_DENIED){
+                    //权限被拒绝
+                    list!!.add(permission)
+                }
+            }
+        }
+        permissionArray= list!!.toArray() as Array<String>?
     }
 
     override fun addPermission(permission: String): Request {

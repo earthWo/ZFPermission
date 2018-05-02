@@ -26,5 +26,5 @@ interface RequestCallback {
   /**
    * 请求结束
    */
-  fun finish(permission :String)
+  fun finish(vararg permission :String?)
 }

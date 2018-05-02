@@ -6,8 +6,10 @@ package win.whitelife.permission.`interface`
  */
 interface IRegisterActivity {
 
-
     fun setCallback(callback: RequestCallback?)
 
-    fun setPermission(permissions: List<String>?)
+    fun setPermission(permissions: Array<String>?)
+
+    fun checkPermission()
+
 }
