@@ -1,6 +1,6 @@
 package win.whitelife.permission.request
 
-import win.whitelife.permission.callback.RequestCallback
+import win.whitelife.permission.`interface`.RequestCallback
 
 /**
  * wuzefeng
@@ -32,7 +32,7 @@ interface Request {
     /**
      * add callback
      */
-    fun addCallback(callback: RequestCallback)
+    fun addCallback(callback: RequestCallback) : Request
 
 
 }

@@ -1,4 +1,4 @@
-package win.whitelife.permission.callback
+package win.whitelife.permission.`interface`
 
 /**
  * wuzefeng

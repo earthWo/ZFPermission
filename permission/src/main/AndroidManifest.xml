@@ -1,2 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="win.whitelife.permission"/>
+          package="win.whitelife.permission">
+
+
+    <application>
+
+        <activity android:name=".PermissionActivity"
+                  android:theme="@style/permission_theme"></activity>
+
+    </application>
+
+
+</manifest>
+
+
