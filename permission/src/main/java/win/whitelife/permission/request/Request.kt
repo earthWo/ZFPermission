@@ -1,6 +1,6 @@
 package win.whitelife.permission.request
 
-import win.whitelife.permission.`interface`.RequestCallback
+import win.whitelife.permission.interfaces.RequestCallback
 
 /**
  * wuzefeng

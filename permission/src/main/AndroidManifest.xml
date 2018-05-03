@@ -2,10 +2,11 @@
           package="win.whitelife.permission">
 
 
-    <application>
 
+
+    <application>
         <activity android:name=".PermissionActivity"
-                  android:theme="@style/permission_theme"></activity>
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
 
     </application>
 

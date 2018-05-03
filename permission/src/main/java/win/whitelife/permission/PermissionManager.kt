@@ -13,13 +13,9 @@ class PermissionManager {
 
     companion object {
 
-
         fun with(context:Context):Request{
             return PermissionRequest(context)
         }
-
-
-
 
 
     }

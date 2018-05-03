@@ -1,4 +1,4 @@
-package win.whitelife.permission.`interface`
+package win.whitelife.permission.interfaces
 
 /**
  * @author wuzefeng

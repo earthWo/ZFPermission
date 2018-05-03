@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">permission</string>
+    <string name="warning">提示</string>
+    <string name="warning_message">应用需要权限，请在设置中开启</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_setting">设置</string>
 </resources>

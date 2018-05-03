@@ -4,8 +4,8 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
-import win.whitelife.permission.`interface`.IRegisterActivity
-import win.whitelife.permission.`interface`.RequestCallback
+import win.whitelife.permission.interfaces.IRegisterActivity
+import win.whitelife.permission.interfaces.RequestCallback
 
 /**
  * @author wuzefeng
@@ -47,7 +47,14 @@ class RegisterCallback :Application.ActivityLifecycleCallbacks{
 
     private var context: Context?=null
 
-    constructor(context: Context,callback: RequestCallback,list: Array<String>){
+
+    companion object {
+        fun registerCallback(context: Context,callback: RequestCallback,list: Array<String>){
+            RegisterCallback(context,callback,list)
+        }
+    }
+
+   private constructor(context: Context,callback: RequestCallback,list: Array<String>){
         (context.applicationContext as Application).registerActivityLifecycleCallbacks(this)
         this.context=context
         this.callback=callback
