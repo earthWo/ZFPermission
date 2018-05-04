@@ -1,2 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="win.whitelife.permission"/>
+          package="win.whitelife.permission">
+
+
+
+
+    <application>
+        <activity android:name=".PermissionActivity"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
+
+    </application>
+
+
+</manifest>
+
+
