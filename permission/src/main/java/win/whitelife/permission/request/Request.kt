@@ -1,5 +1,6 @@
 package win.whitelife.permission.request
 
+import win.whitelife.permission.interfaces.Action
 import win.whitelife.permission.interfaces.RequestCallback
 
 /**
@@ -29,10 +30,12 @@ interface Request {
      */
     fun addPermission(permissions: List<String>) :Request
 
-    /**
-     * add callback
-     */
-    fun addCallback(callback: RequestCallback) : Request
+
+    fun setFinishAction(action: Action): Request
+
+    fun setGrantedAction(action: Action): Request
+
+    fun setDeniedAction(action: Action): Request
 
 
 }

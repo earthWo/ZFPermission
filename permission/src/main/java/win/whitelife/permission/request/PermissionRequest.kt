@@ -8,6 +8,8 @@ import win.whitelife.permission.PermissionActivity
 import win.whitelife.permission.PermissionChecker
 import win.whitelife.permission.PermissionDialogFragment
 import win.whitelife.permission.RegisterCallback
+import win.whitelife.permission.interfaces.Action
+import win.whitelife.permission.interfaces.RequestAction
 import win.whitelife.permission.interfaces.RequestCallback
 import java.util.*
 import kotlin.collections.ArrayList
@@ -18,6 +20,29 @@ import kotlin.collections.ArrayList
  */
 class PermissionRequest : Request,RequestCallback{
 
+    private var actionFinish: Action?=null
+
+    private var actionDenied: Action?=null
+
+    private var actionGranted: Action?=null
+
+    private fun finish(permissions: Array<String>?){
+        if(actionFinish!=null){
+            actionFinish!!.action(permissions)
+        }
+    }
+
+    private fun denied(permissions: Array<String>?){
+        if(actionDenied!=null){
+            actionDenied!!.action(permissions)
+        }
+    }
+
+    private fun granted(permissions: Array<String>?){
+        if(actionGranted!=null){
+            actionGranted!!.action(permissions)
+        }
+    }
 
     override fun requestFinish(permissions: Array<String>?, grantResults: IntArray?) {
 
@@ -27,48 +52,78 @@ class PermissionRequest : Request,RequestCallback{
 
         //是null的情况
         if(permissions==null||grantResults==null){
-
+            finish(permissions)
         }else{
-
             var hasDeniedPermission=false
             for(i in 0 until permissions.size){
-
                 when{
-                    //通过
+                //通过
                     grantResults[i]==  PackageManager.PERMISSION_GRANTED->{
                         grantedArray.add(permissions[i])
                     }
-                    //拒绝
+                //拒绝
                     grantResults[i]==  PackageManager.PERMISSION_DENIED->{
                         //是否被点击了不再显示权限请求，弹出弹框提示用户去打开
                         if(PermissionChecker.isRequestAlwaysDenied(context!!,permissions!![i])){
                             hasDeniedPermission=true
-                        }else{
-                            deniedArray.add(permissions[i])
                         }
+                        deniedArray.add(permissions[i])
                     }
                 }
             }
 
             if(hasDeniedPermission){
                 val fragment=PermissionDialogFragment()
+                        .setCancel(object :RequestAction{
+                            override fun action() {
+                                granted(grantedArray.toTypedArray())
+                                denied(deniedArray.toTypedArray())
+                                finish(permissions)
+                            }
+                        })
+                        .setFinish(object : RequestAction {
+                            override fun action() {
+                                requestFinish(permissions)
+                            }
+                        })
                 fragment.show((context as Activity).fragmentManager,"PermissionDialog")
+            }else{
+                granted(grantedArray.toTypedArray())
+                denied(deniedArray.toTypedArray())
+                finish(permissions)
             }
         }
     }
 
+    private fun requestFinish(permissions: Array<String>){
+        val deniedList: LinkedList<String>?=LinkedList()
+        val grantedList: LinkedList<String>?=LinkedList()
+        for ( permission in permissions!!.iterator() ){
+            //已经有权限
+            if(!PermissionChecker.checkPermission(context!!,permission!!)){
+                //权限被拒绝
+                deniedList!!.add(permission)
+            }else{
+                grantedList!!.add(permission)
+            }
+        }
+        granted(grantedList!!.toTypedArray())
+        denied(deniedList!!.toTypedArray())
+        finish(permissions)
+    }
 
     private var context :Context?=null
 
     private var permissionList :LinkedList<String>?=null
-
 
     constructor(context: Context){
         this.context=context
         permissionList=LinkedList()
     }
 
-
+    /**
+     * start request
+     */
     override fun start() {
         if(permissionList!=null&&permissionList!!.isNotEmpty()){
             val array=checkPermission()
@@ -76,16 +131,15 @@ class PermissionRequest : Request,RequestCallback{
             if(array.isNotEmpty()){
                 startRequestPermission(array)
             }else{
-                this.requestFinish(null,null)
+                finish(null)
             }
         }else {
-           this.requestFinish(null,null)
+            finish(null)
         }
     }
 
-
     /**
-     * 开始请求
+     * start request
      */
     private fun startRequestPermission(array: Array<String>){
 
@@ -97,7 +151,7 @@ class PermissionRequest : Request,RequestCallback{
     }
 
     /**
-     *
+     * check denied permissions
      */
     private fun checkPermission(): Array<String>{
 
@@ -115,7 +169,7 @@ class PermissionRequest : Request,RequestCallback{
                 }
             }
         }
-        return list!!.toArray(arrayOfNulls<String>(list.size))
+        return list!!.toTypedArray()
     }
 
     override fun addPermission(permission: String): Request {
@@ -133,9 +187,28 @@ class PermissionRequest : Request,RequestCallback{
         return this
     }
 
-    override fun addCallback(callback: RequestCallback) : Request {
+    /**
+     * set Finish Action
+     */
+    override fun setFinishAction(action: Action): Request{
+        this.actionFinish=action
         return this
+    }
 
+    /**
+     * set Deied Action
+     */
+    override fun setDeniedAction(action: Action): Request{
+        this.actionDenied=action
+        return this
+    }
+
+    /**
+     * set Granted Action
+     */
+    override fun setGrantedAction(action: Action): Request{
+        this.actionGranted=action
+        return this
     }
 
 }
