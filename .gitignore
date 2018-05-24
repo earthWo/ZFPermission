@@ -8,3 +8,4 @@
 /build
 /captures
 .externalNativeBuild
+/permission/bintray_build.gradle

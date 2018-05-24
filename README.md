@@ -1,4 +1,8 @@
 # ZFPermission
+引入方法：
+```
+compile 'win.whitelife.ZFPermission:permission:0.0.1'
+```
 使用方式：
 ```
 PermissionManager.with(this)
